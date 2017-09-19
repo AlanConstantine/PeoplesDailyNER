@@ -9,6 +9,7 @@ import math
 import json
 import numpy as np
 from pprint import pprint as p
+from keras.utils import np_utils
 # from keras.models import Sequential
 # from keras.layers import Dense, Activation
 
@@ -34,18 +35,21 @@ class revivification:
 
 
 class nn:
-    def __init__(self, dataset, labels):
+    def __init__(self, dataset, labels, wordvocab):
         self.dataset = dataset
         self.labels = labels
+        self.wordvocab = wordvocab
 
     def trainingModel(self):
-        embeddingDim = dataset.shape[1]
-        model = Sequential()
-        maxlen = 100
-        embeddingWeights = 0.3
-        vocabSize = None
+        vocabSize = len(self.wordvocab)
+        embeddingDim = None
+        maxlen = None
+        embeddingWeights = None
         hiddenDims = None
         batchSiz = None
+        outputDims = None
+        train_X = self.dataset
+        Y_train = np_utils.to_categorical(self.labels, outputDims)
         model = Sequential()
         model.add(Embedding(output_dim=embeddingDim, input_dim=vocabSize + 1,
                             input_length=maxlen, mask_zero=True, weights=[embeddingWeights]))
@@ -61,8 +65,8 @@ class nn:
 
 
 def main():
-    dataset, labels, word_index = load(r'PDdataNoReduce.json')
-    corpus = revivification(dataset, word_index).reStore()
+    dataset, labels, wordvocab = load(r'PDdataNoReduce.json')
+    corpus = revivification(dataset, wordvocab).reStore()
     p(corpus)
 
 
