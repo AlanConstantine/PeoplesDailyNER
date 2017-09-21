@@ -18,14 +18,14 @@ class preprocess:
     def __init__(self, path):
         self.corpus = []
         self.tokenizer = None
-        with open(path, 'r') as f:
+        with open(path, 'r', encoding='utf8') as f:
             self.copurs = f.readlines()
         # labelnum = collections.OrderedDict({'B': 1, 'M': 2, 'E': 3, 'S': 4})
 
     def voc2label(self, word):
         if len(word) == 1:
             # return 'S'
-            return '4'
+            return '0'
         elif len(word) == 2:
             # return 'BE'
             return '13'
@@ -51,14 +51,18 @@ class preprocess:
                 newsparagraphs = newsparagraphs.replace(spunc, spunc + '/')
             # split the text by '/'.
             for newscontent in newsparagraphs.split('/'):
+                newscontent = ' '.join(list(
+                    filter(lambda x: len(x) != 0, newscontent.split())))
                 replablock = newscontent.replace(' ', '')
                 if len(replablock) == 0:
                     continue
                 newscontents.append(replablock)
 
                 # get news label
-                newslabel = ''.join(list(map(lambda word: self.voc2label(word), list(
-                    filter(lambda x: len(x) != 0, newscontent.split())))))
+                newslabel = ''.join(
+                    list(map(lambda word: self.voc2label(word), newscontent.split())))
+                assert (len(replablock) == len(newslabel)
+                        ), "Wrong size!"
                 # if len(newslabel) < 100:
                 # newslabel = newslabel + 'N' * (100 - len(newslabel))
                 # newslabel = newslabel + '0' * (100 - len(newslabel))
@@ -74,7 +78,8 @@ class preprocess:
         # textvec = pad_sequences(sequences)
         textvec = pad_sequences(sequences, maxlen=100,
                                 padding='post', truncating='post', value=0)
-        return textvec, np.array(labels), dict(self.tokenizer.word_index)
+        labels = pad_sequences(labels, maxlen=100, padding='post')
+        return textvec, labels, dict(self.tokenizer.word_index)
 
     def save2json(self, savepath):
         textvec, labels, word_index = self.text2vec()
@@ -100,8 +105,8 @@ def outvec(path, vecs):
 
 def main():
     corpus = r'199801_people_s_daily.txt'
-    savepath = r'PDdata.json'
-    # textvec, labels, tokenizer = preprocess(corpus).text2vec()
+    savepath = r'PDdatatest1.json'
+    textvec, labels, tokenizer = preprocess(corpus).text2vec()
     # print(output(r'vocab.txt', str(tokenizer)))
     # outvec(r'text2vec.txt', textvec.tolist())
     # print(textvec.shape)
