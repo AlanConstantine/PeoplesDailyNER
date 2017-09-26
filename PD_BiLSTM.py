@@ -69,6 +69,8 @@ class nn:
         model.compile(loss='categorical_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'], )
+        # from keras.utils import plot_model
+        # plot_model(model, to_file='model.png', show_shapes=True)
         # plot_model(model, to_file='model.png',
         #    show_layer_names=True, show_shapes=True)
 
@@ -83,12 +85,20 @@ class nn:
         # model.compile(loss='categorical_crossentropy',
         #               optimizer='adam', metrics=['accuracy'])
 
-        result = model.fit(train_X, Y_train, batch_size=batchSize, epochs=20)
-        model.save('PDmodel.h5')
+        result = model.fit(train_X, Y_train, batch_size=batchSize, epochs=5)
+        # json_string = model.to_json()
+        model.save('PDmodel_epoch_100.h5')
+        # self.save2json(json_string, r'model.json')
+
+    def save2json(self, json_string, savepath):
+        with open(savepath, 'w', encoding='utf8') as f:
+            f.write(json_string)
+        return "save done."
 
 
 def main():
-    dataset, labels, wordvocab = load(r'PDdatatest1.json')
+    # dataset, labels, wordvocab = load(r'test.json')
+    dataset, labels, wordvocab = load(r'PDdata.json')
     # corpus = revivification(dataset, wordvocab).reStore()
     # p(corpus)
     trainLSTM = nn(dataset, labels, wordvocab).trainingModel()

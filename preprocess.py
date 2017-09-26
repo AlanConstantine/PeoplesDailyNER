@@ -20,7 +20,7 @@ class preprocess:
         self.tokenizer = None
         with open(path, 'r', encoding='utf8') as f:
             self.copurs = f.readlines()
-        # labelnum = collections.OrderedDict({'B': 1, 'M': 2, 'E': 3, 'S': 4})
+        # labelnum = collections.OrderedDict({'B': 1, 'M': 2, 'E': 3, 'S': 0})
 
     def voc2label(self, word):
         if len(word) == 1:
@@ -78,7 +78,7 @@ class preprocess:
         # textvec = pad_sequences(sequences)
         textvec = pad_sequences(sequences, maxlen=100,
                                 padding='post', truncating='post', value=0)
-        labels = pad_sequences(labels, maxlen=100, padding='post')
+        labels = pad_sequences(labels, maxlen=100, padding='post', value=9)
         return textvec, labels, dict(self.tokenizer.word_index)
 
     def save2json(self, savepath):
@@ -105,7 +105,7 @@ def outvec(path, vecs):
 
 def main():
     corpus = r'199801_people_s_daily.txt'
-    savepath = r'PDdatatest1.json'
+    savepath = r'PDdata.json'
     textvec, labels, tokenizer = preprocess(corpus).text2vec()
     # print(output(r'vocab.txt', str(tokenizer)))
     # outvec(r'text2vec.txt', textvec.tolist())
