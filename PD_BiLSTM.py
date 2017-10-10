@@ -6,6 +6,7 @@
 
 import json
 import keras
+from datetime import datetime as dt
 import numpy as np
 from keras.utils import np_utils
 from keras.models import Sequential, Model
@@ -41,12 +42,12 @@ class nn:
 
     def trainingModel(self):
         vocabSize = len(self.wordvocab)
-        embeddingDim = 2  # the vector size a word need to be converted
+        embeddingDim = 100  # the vector size a word need to be converted
         maxlen = 100  # the size of a sentence vector
-        outputDims = 4
+        outputDims = 4 + 1
         # embeddingWeights = np.zeros((len(word_index) + 1, EMBEDDING_DIM))
         hiddenDims = 100
-        batchSize = 20
+        batchSize = 32
         train_X = self.dataset
         Y_train = np.array([np_utils.to_categorical(
             ele, outputDims) for ele in self.labels])
@@ -85,9 +86,9 @@ class nn:
         # model.compile(loss='categorical_crossentropy',
         #               optimizer='adam', metrics=['accuracy'])
 
-        result = model.fit(train_X, Y_train, batch_size=batchSize, epochs=5)
+        result = model.fit(train_X, Y_train, batch_size=batchSize, epochs=150)
         # json_string = model.to_json()
-        model.save('PDmodel_epoch_100.h5')
+        model.save('PDmodel_epoch_150_batchsize_32_embeddingDim_100.h5')
         # self.save2json(json_string, r'model.json')
 
     def save2json(self, json_string, savepath):
@@ -105,4 +106,8 @@ def main():
 
 
 if __name__ == '__main__':
+    ts = dt.now()
     main()
+    te = dt.now()
+    spent = te - ts
+    print('[Finished in %s]' % spent)

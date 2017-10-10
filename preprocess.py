@@ -20,12 +20,12 @@ class preprocess:
         self.tokenizer = None
         with open(path, 'r', encoding='utf8') as f:
             self.copurs = f.readlines()
-        # labelnum = collections.OrderedDict({'B': 1, 'M': 2, 'E': 3, 'S': 0})
+        # labelnum = collections.OrderedDict({'B': 1, 'M': 2, 'E': 3, 'S': 4})
 
     def voc2label(self, word):
         if len(word) == 1:
             # return 'S'
-            return '0'
+            return '4'
         elif len(word) == 2:
             # return 'BE'
             return '13'
@@ -78,7 +78,7 @@ class preprocess:
         # textvec = pad_sequences(sequences)
         textvec = pad_sequences(sequences, maxlen=100,
                                 padding='post', truncating='post', value=0)
-        labels = pad_sequences(labels, maxlen=100, padding='post', value=9)
+        labels = pad_sequences(labels, maxlen=100, padding='post', value=0)
         return textvec, labels, dict(self.tokenizer.word_index)
 
     def save2json(self, savepath):
