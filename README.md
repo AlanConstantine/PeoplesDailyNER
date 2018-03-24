@@ -36,7 +36,7 @@
 
 ##### 四、进入BiLSTM进行训练
 
-### BiLSTM结构图
+### 神经网络结构
 ![](https://github.com/AlanConstantine/PeoplesDailyNER/raw/master/model.png) 
 
 ### 各文件说明
