@@ -40,6 +40,9 @@
 ![](https://github.com/AlanConstantine/PeoplesDailyNER/raw/master/model.png) 
 
 ### 各文件说明
+语料：
+* 199801_people_s_daily.txt
+    * 语料，里面的不仅仅做了分词处理，还有词性的标准，针对词性这不做研究 
 主要的程序：
 * preprocess.py
     * 对文本预处理，将文本向量化，结果储存到PDdata.json
