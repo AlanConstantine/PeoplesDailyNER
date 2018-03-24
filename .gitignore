@@ -1,3 +1,5 @@
 *.json
 corpus.txt
-ExampleofTokenizer/*
+/ExampleofTokenizer/
+/deeplearning_task1/
+/.vscode/

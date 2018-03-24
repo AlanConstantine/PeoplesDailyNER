@@ -88,7 +88,7 @@ class nn:
 
         result = model.fit(train_X, Y_train, batch_size=batchSize, epochs=150)
         # json_string = model.to_json()
-        model.save('PDmodel_epoch_150_batchsize_32_embeddingDim_100.h5')
+        model.save('PDmodel_epoch_150_batchsize_32_embeddingDim_100_new.h5')
         # self.save2json(json_string, r'model.json')
 
     def save2json(self, json_string, savepath):
