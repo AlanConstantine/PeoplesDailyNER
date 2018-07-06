@@ -1,6 +1,9 @@
 # PeoplesDailyNER
 使用BiLSTM对人民日报语料进行分词
 
+
+######2018年7月6日更新BiLSTM+CRF模型
+
 `去年9月份初步尝试神经网络，今天拿出来写写，请路过的大神不吝赐教，感恩！`
 
 ### 环境
@@ -50,6 +53,10 @@
 * PD_BiLSTM.py
     * 读取PDdata.json，进入神经网络训练
     * 生成PDmodel_epoch_150_batchsize_32_embeddingDim_100.h5　这个是模型，方便后续进行测试
+* (可选)PD_BiLSTM－CRF.py
+    * 加入了crf层
+    * 读取PDdata.json，进入神经网络训练
+    * 生成PDmodel_epoch_150_batchsize_32_embeddingDim_100.h5　这个是模型，方便后续进行测试
 * LSTMpredict.py
     * 测试数据，代码中已经给出测试文本
 
@@ -69,7 +76,7 @@
         ３．LSTMpredict.py
 
 ### 结果
-迭代到19次的时候已经是0.9726,去年9月份记得150次的结果是0.99多
+迭代到19次的时候已经是0.9726,去年9月份记得150次的结果是0.99多，召回率、准确率以及Ｆ值没有测试。
 ![](https://github.com/AlanConstantine/PeoplesDailyNER/raw/master/acc.png)
 
 拿出去年生成的模型进行测试

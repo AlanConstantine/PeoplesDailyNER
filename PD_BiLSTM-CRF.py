@@ -10,7 +10,7 @@ import numpy as np
 from keras.utils import np_utils
 from keras.models import Sequential, Model
 from keras.layers import Dense, Activation, Embedding, LSTM, Dropout, Bidirectional, Input, Masking, TimeDistributed
-from keras_contrib.layers.crf import CRF
+from keras_contrib.layers import CRF
 
 
 def load(datapath):
@@ -35,8 +35,8 @@ class revivification:
 
 class nn:
     def __init__(self, dataset, labels, wordvocab):
-        self.dataset = np.array([np.array(ele) for ele in dataset])
-        self.labels = np.array([np.array(ele) for ele in labels])
+        self.dataset = np.array(dataset)
+        self.labels = np.array(labels)
         self.wordvocab = wordvocab
 
     def trainingModel(self):
@@ -50,11 +50,10 @@ class nn:
         # NUM_CLASS = 4
 
         train_X = self.dataset
-        Y_train = np.array(
-            [np_utils.to_categorical(ele, outputDims) for ele in self.labels])
+        train_Y = np_utils.to_categorical(self.labels, outputDims)
 
         print(train_X.shape)
-        print(Y_train.shape)
+        print(train_Y.shape)
         max_features = vocabSize + 1
 
         word_input = Input(
@@ -65,8 +64,9 @@ class nn:
             name='word_emb')(mask)
         bilstm1 = Bidirectional(LSTM(hiddenDims,
                                      return_sequences=True))(word_emb)
-        #bilstm2 = Bidirectional(LSTM(hiddenDims, return_sequences=True))(bilstm1)
-        bilstm_d = Dropout(0.5)(bilstm1)
+        bilstm2 = Bidirectional(
+            LSTM(hiddenDims, return_sequences=True))(bilstm1)
+        bilstm_d = Dropout(0.8)(bilstm2)
         dense = TimeDistributed(Dense(outputDims,
                                       activation='softmax'))(bilstm_d)
 
@@ -80,7 +80,7 @@ class nn:
             loss=crf_layer.loss_function,
             metrics=[crf_layer.accuracy])
 
-        result = model.fit(train_X, Y_train, batch_size=batchSize, epochs=150)
+        result = model.fit(train_X, train_Y, batch_size=batchSize, epochs=150)
 
         model.save(
             'PDmodel-crf_epoch_150_batchsize_32_embeddingDim_100_new.h5')

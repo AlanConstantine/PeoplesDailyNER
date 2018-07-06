@@ -35,9 +35,8 @@ class revivification:
 
 class nn:
     def __init__(self, dataset, labels, wordvocab):
-        self.dataset = np.array([np.array(ele) for ele in dataset])
-        self.labels = np.array([np.array(ele)
-                                for ele in labels])
+        self.dataset = np.array(dataset)
+        self.labels = np.array(labels)
         self.wordvocab = wordvocab
 
     def trainingModel(self):
@@ -45,15 +44,13 @@ class nn:
         embeddingDim = 100  # the vector size a word need to be converted
         maxlen = 100  # the size of a sentence vector
         outputDims = 4 + 1
-        # embeddingWeights = np.zeros((len(word_index) + 1, EMBEDDING_DIM))
         hiddenDims = 100
         batchSize = 32
         train_X = self.dataset
-        Y_train = np.array([np_utils.to_categorical(
-            ele, outputDims) for ele in self.labels])
+        train_Y = np_utils.to_categorical(self.labels, outputDims)
 
         print(train_X.shape)
-        print(Y_train.shape)
+        print(train_Y.shape)
         max_features = vocabSize + 1
         word_input = Input(shape=(maxlen,), dtype='float32', name='word_input')
         mask = Masking(mask_value=0.)(word_input)
@@ -61,35 +58,20 @@ class nn:
                              input_length=maxlen, name='word_emb')(mask)
         bilstm1 = Bidirectional(
             LSTM(hiddenDims, return_sequences=True))(word_emb)
-        #bilstm2 = Bidirectional(LSTM(hiddenDims, return_sequences=True))(bilstm1)
-        bilstm_d = Dropout(0.5)(bilstm1)
+        bilstm2 = Bidirectional(
+            LSTM(hiddenDims, return_sequences=True))(bilstm1)
+        bilstm_d = Dropout(0.5)(bilstm2)
         output = TimeDistributed(
             Dense(outputDims, activation='softmax'))(bilstm_d)
         model = Model(inputs=[word_input], outputs=output)
         #sgd = optimizers.SGD(lr=0.1, decay=1e-3)
+        model.summary()
         model.compile(loss='categorical_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'], )
-        # from keras.utils import plot_model
-        # plot_model(model, to_file='model.png', show_shapes=True)
-        # plot_model(model, to_file='model.png',
-        #    show_layer_names=True, show_shapes=True)
 
-        # , weights=[embeddingWeights]
-        # model.add(Embedding(output_dim=embeddingDim, input_dim=vocabSize + 1,
-        #                     input_length=maxlen, mask_zero=True))
-        # model.add(LSTM(output_dim=hiddenDims, return_sequences=True))
-        # model.add(LSTM(output_dim=hiddenDims, return_sequences=False))
-        # model.add(Dropout(0.5))
-        # model.add(Dense(outputDims))
-        # model.add(Activation('softmax'))
-        # model.compile(loss='categorical_crossentropy',
-        #               optimizer='adam', metrics=['accuracy'])
-
-        result = model.fit(train_X, Y_train, batch_size=batchSize, epochs=150)
-        # json_string = model.to_json()
-        model.save('PDmodel_epoch_150_batchsize_32_embeddingDim_100_new.h5')
-        # self.save2json(json_string, r'model.json')
+        result = model.fit(train_X, train_Y, batch_size=batchSize, epochs=150)
+        model.save('PDmodel_epoch_150_batchsize_32_embeddingDim_100_new2.h5')
 
     def save2json(self, json_string, savepath):
         with open(savepath, 'w', encoding='utf8') as f:
@@ -98,10 +80,8 @@ class nn:
 
 
 def main():
-    # dataset, labels, wordvocab = load(r'test.json')
     dataset, labels, wordvocab = load(r'PDdata.json')
     # corpus = revivification(dataset, wordvocab).reStore()
-    # p(corpus)
     trainLSTM = nn(dataset, labels, wordvocab).trainingModel()
 
 
