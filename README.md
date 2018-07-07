@@ -1,6 +1,6 @@
 # PeoplesDailyNER
 
-##### 2018年7月6日更新BiLSTM+CRF模型
+##### #2018年7月6日更新BiLSTM+CRF模型#
 
 使用BiLSTM对人民日报语料进行分词
 
