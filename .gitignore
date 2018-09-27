@@ -4,3 +4,4 @@ corpus.txt
 /deeplearning_task1/
 /.vscode/
 .DS_Store
+*.h5
