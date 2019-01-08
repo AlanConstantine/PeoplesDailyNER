@@ -80,7 +80,7 @@ class nn:
             loss=crf_layer.loss_function,
             metrics=[crf_layer.accuracy])
 
-        result = model.fit(train_X, train_Y, batch_size=batchSize, epochs=150)
+        result = model.fit(train_X, train_Y, batch_size=batchSize, epochs=10)
 
         model.save(
             'PDmodel-crf_epoch_150_batchsize_32_embeddingDim_100_new.h5')
