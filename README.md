@@ -85,3 +85,6 @@
 拿出去年生成的模型进行测试
 ![](https://github.com/AlanConstantine/PeoplesDailyNER/raw/master/result.png)
 生成的向量对应分词向量标签
+
+##### TO DO
+Use BERT on PeopleDaily NER
