@@ -15,6 +15,8 @@
 
 ### 技术栈
 * keras
+* [keras-contrib](https://github.com/keras-team/keras-contrib)
+	* 目前仅支持tensorflow>=1.10.0
 * numpy
 * re
 
