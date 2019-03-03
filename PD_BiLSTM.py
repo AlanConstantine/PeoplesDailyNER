@@ -70,8 +70,8 @@ class nn:
                       optimizer='adam',
                       metrics=['accuracy'], )
 
-        result = model.fit(train_X, train_Y, batch_size=batchSize, epochs=150)
-        model.save('PDmodel_epoch_150_batchsize_32_embeddingDim_100_new2.h5')
+        result = model.fit(train_X, train_Y, batch_size=batchSize, epochs=10)
+        model.save('PDmodel_epoch_10_batchsize_32_embeddingDim_100_new2.h5')
 
     def save2json(self, json_string, savepath):
         with open(savepath, 'w', encoding='utf8') as f:
